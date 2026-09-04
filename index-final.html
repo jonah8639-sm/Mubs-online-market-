@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUBS Online Market</title>
+    <style>
+        :root {
+            --mubs-blue: #003d82;
+            --mubs-gold: #d4a574;
+            --surface: #f9fafb;
+            --border: #e5e7eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--surface);
+            color: #1f2937;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .navbar-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--mubs-blue);
+        }
+        
+        .navbar-brand span {
+            color: var(--mubs-gold);
+        }
+        
+        .navbar-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: var(--surface);
+            border-color: var(--mubs-blue);
+        }
+        
+        .btn-primary {
+            background: var(--mubs-blue);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #002d5c;
+        }
+        
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--mubs-blue) 0%, #002d5c 100%);
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: var(--mubs-blue);
+            color: white;
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--mubs-gold);
+        }
+        
+        .auth-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-content {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--mubs-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--mubs-blue);
+            box-shadow: 0 0 0 3px rgba(0, 61, 130, 0.1);
+        }
+        
+        .image-preview {
+            margin-top: 1rem;
+            max-width: 200px;
+            border-radius: 6px;
+            border: 2px solid var(--mubs-gold);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--mubs-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background: #002d5c;
+        }
+        
+        .toggle-form {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #6b7280;
+        }
+        
+        .toggle-form button {
+            background: none;
+            border: none;
+            color: var(--mubs-blue);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .verification-badge {
+            background: #f0f9ff;
+            border-left: 4px solid var(--mubs-gold);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--mubs-blue);
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            color: var(--mubs-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .about-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        .about-section h2 {
+            color: var(--mubs-blue);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .listing-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .listing-card:hover {
+            border-color: var(--mubs-gold);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .listing-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(0, 61, 130, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            object-fit: cover;
+        }
+        
+        .listing-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .listing-info {
+            padding: 1rem;
+        }
+        
+        .listing-name {
+            font-weight: 600;
+            color: var(--mubs-blue);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .listing-description {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .listing-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--mubs-gold);
+            margin-bottom: 0.75rem;
+        }
+        
+        .listing-seller {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+        
+        .contact-btn {
+            width: 100%;
+            background: var(--mubs-blue);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .contact-btn:hover {
+            background: #002d5c;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #7f1d1d;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>MUBS Online Market</h1>
+                <p>Buy & sell with campus mates</p>
+            </div>
+            
+            <div class="auth-content">
+                <div class="verification-badge">
+                    <strong>🔒 Campus only</strong>
+                    Only MUBS students can join.
+                </div>
+                
+                <div id="successMsg" class="success-message hidden"></div>
+                <div id="errorMsg" class="error-message hidden"></div>
+                
+                <!-- Sign Up Form -->
+                <form id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full name</label>
+                        <input type="text" id="signupName" placeholder="Your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>MUBS email</label>
+                        <input type="email" id="signupEmail" placeholder="yourname@mubs.ac.ug" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="At least 8 characters" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Create account</button>
+                    
+                    <div class="toggle-form">
+                        Already have an account? <button type="button" onclick="toggleForm()">Log in</button>
+                    </div>
+                </form>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="hidden" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>MUBS email</label>
+                        <input type="email" id="loginEmail" placeholder="yourname@mubs.ac.ug" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Your password" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Log in</button>
+                    
+                    <div class="toggle-form">
+                        Don't have an account? <button type="button" onclick="toggleForm()">Sign up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Marketplace Section (Hidden until login) -->
+    <div id="marketplaceSection" class="hidden">
+        <div class="navbar">
+            <div class="navbar-brand">MUBS <span>Online Market</span></div>
+            <div class="navbar-actions">
+                <button class="btn" onclick="showAbout()">About</button>
+                <button class="btn" onclick="showMarketplace()">Browse</button>
+                <button class="btn btn-primary" onclick="showSeller()">+ Sell</button>
+                <button class="btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- About Section -->
+            <div id="aboutContent" class="hidden">
+                <div class="header">
+                    <h1>About MUBS Online Market</h1>
+                </div>
+                <div class="about-section">
+                    <h2>What We Do</h2>
+                    <p>MUBS Online Market is the trusted buy & sell hub made for MUBS students. Find affordable course books, laptops, phones, and hostel essentials from real, verified students only — every seller is confirmed with @mubs.ac.ug email, so no scams. Post your item in 30 seconds, meet buyers online and pay on delivery. Simple, safe and student-owned.</p>
+                    
+                    <h2 style="margin-top: 2rem;">Why Choose Us?</h2>
+                    <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>Campus Verified:</strong> Only MUBS students with official emails</li>
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>No Scams:</strong> Every seller is confirmed and verified</li>
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>Easy to Use:</strong> Post items in 30 seconds</li>
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>Direct Messaging:</strong> Chat with sellers via WhatsApp</li>
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>Pay on Delivery:</strong> Safe transactions on campus</li>
+                        <li style="margin-bottom: 0.75rem;">✓ <strong>Student Owned:</strong> Built by MUBS students, for MUBS students</li>
+                    </ul>
+                </div>
+                <button class="btn" style="margin-top: 2rem; width: 100%;" onclick="showMarketplace()">Back to Marketplace</button>
+            </div>
+            
+            <!-- Marketplace Content -->
+            <div id="marketplaceContent">
+                <div class="header">
+                    <h1>What's being sold today?</h1>
+                    <p>Browse items from your campus mates</p>
+                </div>
+                
+                <div class="marketplace-grid" id="listingsGrid"></div>
+            </div>
+            
+            <!-- Seller Content -->
+            <div id="sellerContent" class="hidden">
+                <div class="header">
+                    <h1>Post a New Item</h1>
+                    <p>Share what you're selling with MUBS students</p>
+                </div>
+                
+                <div style="background: white; border-radius: 8px; padding: 2rem; border: 1px solid var(--border); max-width: 600px;">
+                    <form onsubmit="handleCreateListing(event)">
+                        <div class="form-group">
+                            <label>Item name</label>
+                            <input type="text" id="itemName" placeholder="e.g. MAC Lipstick, iPhone 11" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="itemDescription" placeholder="Describe your item (condition, features, etc)" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Price (UGX)</label>
+                            <input type="number" id="itemPrice" placeholder="45000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="itemCategory" required>
+                                <option value="cosmetics">Cosmetics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books & Notes</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="food">Food & Snacks</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Upload Product Photo 📸</label>
+                            <input type="file" id="itemImage" accept="image/*" onchange="previewImage(event)">
+                            <img id="imagePreview" class="image-preview hidden" alt="Preview">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Your Phone Number (for buyers to contact)</label>
+                            <input type="tel" id="sellerPhone" placeholder="+256700000000 or 0700000000" required>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Post Listing</button>
+                    </form>
+                    <button class="btn" style="width: 100%;" onclick="showMarketplace()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentUser = null;
+        let currentImage = null;
+        let listings = [
+            { id: 1, name: "MAC Lipstick Red", description: "Brand new, never used", price: 45000, category: "cosmetics", seller: "Angela M.", phone: "+256700000001", verified: true, image: null },
+            { id: 2, name: "Foundation (Fair)", description: "Lightly used, great condition", price: 38000, category: "cosmetics", seller: "Brenda N.", phone: "+256700000002", verified: true, image: null },
+        ];
+        
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = currentImage;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function toggleForm() {
+            document.getElementById('signupForm').classList.toggle('hidden');
+            document.getElementById('loginForm').classList.toggle('hidden');
+        }
+        
+        function showAbout() {
+            document.getElementById('marketplaceContent').classList.add('hidden');
+            document.getElementById('sellerContent').classList.add('hidden');
+            document.getElementById('aboutContent').classList.remove('hidden');
+        }
+        
+        function showMarketplace() {
+            document.getElementById('aboutContent').classList.add('hidden');
+            document.getElementById('sellerContent').classList.add('hidden');
+            document.getElementById('marketplaceContent').classList.remove('hidden');
+            renderListings();
+        }
+        
+        function showSeller() {
+            document.getElementById('aboutContent').classList.add('hidden');
+            document.getElementById('marketplaceContent').classList.add('hidden');
+            document.getElementById('sellerContent').classList.remove('hidden');
+            document.getElementById('sellerPhone').value = '';
+            currentImage = null;
+            document.getElementById('imagePreview').classList.add('hidden');
+        }
+        
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            if (!email.includes('@mubs.ac.ug')) {
+                showError('Use your MUBS email (@mubs.ac.ug)');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showError('Password must be at least 8 characters');
+                return;
+            }
+            
+            currentUser = { name, email };
+            showSuccess('Account created! Logging in...');
+            setTimeout(() => {
+                loginUser();
+            }, 1500);
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email.includes('@mubs.ac.ug')) {
+                showError('Use your MUBS email');
+                return;
+            }
+            
+            currentUser = { name: email.split('@')[0], email };
+            loginUser();
+        }
+        
+        function loginUser() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('marketplaceSection').classList.remove('hidden');
+            showMarketplace();
+        }
+        
+        function handleLogout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('marketplaceSection').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+        }
+        
+        function renderListings() {
+            const grid = document.getElementById('listingsGrid');
+            grid.innerHTML = listings.map((item) => `
+                <div class="listing-card">
+                    <div class="listing-image">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '📦'}
+                    </div>
+                    <div class="listing-info">
+                        <div class="listing-name">${item.name}</div>
+                        <div class="listing-description">${item.description}</div>
+                        <div class="listing-price">UGX ${item.price.toLocaleString()}</div>
+                        <div class="listing-seller">
+                            ${item.verified ? '✓ ' : ''}${item.seller}
+                        </div>
+                        <a href="https://wa.me/${item.phone.replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(item.seller)}%2C%20I%27m%20interested%20in%20your%20${encodeURIComponent(item.name)}" target="_blank" class="contact-btn">💬 Message on WhatsApp</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function handleCreateListing(e) {
+            e.preventDefault();
+            const name = document.getElementById('itemName').value;
+            const description = document.getElementById('itemDescription').value;
+            const price = parseInt(document.getElementById('itemPrice').value);
+            const category = document.getElementById('itemCategory').value;
+            const phone = document.getElementById('sellerPhone').value;
+            
+            const newListing = {
+                id: listings.length + 1,
+                name,
+                description,
+                price,
+                category,
+                seller: currentUser.name,
+                phone,
+                verified: true,
+                image: currentImage
+            };
+            
+            listings.push(newListing);
+            showSuccess('Listing created! 🎉');
+            e.target.reset();
+            currentImage = null;
+            document.getElementById('imagePreview').classList.add('hidden');
+            setTimeout(() => {
+                showMarketplace();
+            }, 1500);
+        }
+        
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 3000);
+        }
+        
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>
