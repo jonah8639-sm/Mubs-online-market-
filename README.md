@@ -1,2 +1,20 @@
-<!-- Updated at 01:00 UTC --># Mubs-online-market-
-MUBS Online Market is the trusted buy &amp; sell hub made for MUBS students. Find affordable course books, laptops, phones, and hostel essentials from real, verified students only — every seller is confirmed with @mubs.ac.ug email, so no scams. Post your item in 30 seconds, meet buyers and pay on delivery. Simple, safe and student-owned.
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/e091ced7-46bd-4cbe-89b6-a77f66ccc06e
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

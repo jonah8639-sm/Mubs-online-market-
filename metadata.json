@@ -1,0 +1,10 @@
+{
+  "name": "MUBS Online Market",
+  "description": "MUBS Online Market - Official marketplace for MUBS students. Buy and sell books, electronics, hostel items at MUBS Main Campus, Nakawa, Banda. Verified MUBS students only.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

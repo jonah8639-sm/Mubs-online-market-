@@ -1,0 +1,154 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile representation for MUBS students and admins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "trialEndsAt": { "type": "string", "format": "date-time" },
+        "plan": { "type": "string", "enum": ["free", "trial", "premium"] },
+        "isVerified": { "type": "boolean" },
+        "boostsRemaining": { "type": "number" }
+      },
+      "required": ["id", "email", "createdAt", "isVerified"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Marketplace listing for textbooks, electronics, hostel items, and fashion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "price": { "type": "number" },
+        "category": { "type": "string", "enum": ["Books", "Electronics", "Hostel Items", "Fashion", "Other"] },
+        "description": { "type": "string", "maxLength": 2000 },
+        "location": { "type": "string", "enum": ["MUBS Main Campus", "Nakawa", "Banda", "Hostel"] },
+        "whatsapp": { "type": "string", "maxLength": 20 },
+        "imageUrl": { "type": "string", "maxLength": 2048 },
+        "seller_id": { "type": "string", "maxLength": 128 },
+        "seller_email": { "type": "string", "maxLength": 128 },
+        "seller_name": { "type": "string", "maxLength": 128 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "is_boosted": { "type": "boolean" },
+        "boost_expires_at": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "sold", "expired"] }
+      },
+      "required": ["title", "price", "category", "description", "location", "whatsapp", "imageUrl", "seller_id", "seller_email"]
+    },
+    "BoostRequest": {
+      "title": "BoostRequest",
+      "description": "Payment verification request to boost a product for 7 days at 5,000 UGX",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "product_id": { "type": "string", "maxLength": 128 },
+        "product_title": { "type": "string", "maxLength": 200 },
+        "seller": { "type": "string", "maxLength": 128 },
+        "seller_id": { "type": "string", "maxLength": 128 },
+        "amount": { "type": "number" },
+        "momo_reference": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["product_id", "seller", "amount", "momo_reference", "status"]
+    },
+    "PremiumRequest": {
+      "title": "PremiumRequest",
+      "description": "Monthly premium membership request at 15,000 UGX",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "seller": { "type": "string", "maxLength": 128 },
+        "seller_id": { "type": "string", "maxLength": 128 },
+        "amount": { "type": "number" },
+        "momo_reference": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["seller", "amount", "momo_reference", "status"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "In-app negotiation and escrow chat session between buyer and seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "productTitle": { "type": "string" },
+        "productPrice": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "negotiating", "offer_accepted", "escrow_pending", "completed_auto_paid", "disputed"] },
+        "agreedPrice": { "type": "number" },
+        "commissionKept": { "type": "number" },
+        "sellerPaid": { "type": "number" },
+        "escrowPaid": { "type": "boolean" },
+        "autoSplit": { "type": "boolean" }
+      },
+      "required": ["productId", "buyerId", "sellerId", "status"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Message within a negotiation and auto-split escrow chat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "type": { "type": "string", "enum": ["text", "offer", "offer_accepted", "offer_rejected", "payment_prompt", "auto_split_receipt", "system"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["chatId", "senderId", "text", "type"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Collection storing student and seller profiles"
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Collection storing student items listed for sale"
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/Chat" },
+      "description": "In-app buyer/seller negotiation chats with escrow auto-split"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Chat messages and offer negotiations"
+    },
+    "/escrow_wallet/{docId}": {
+      "description": "Escrow pending payouts and auto-split disbursements"
+    },
+    "/contact_requests/{docId}": {
+      "description": "Logs of contact requests or blocked off-platform phone attempts"
+    },
+    "/config/{docId}": {
+      "description": "Admin configuration including MoMo API credentials and mode"
+    },
+    "/boost_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/BoostRequest" },
+      "description": "Payment requests for product boosts"
+    },
+    "/premium_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/PremiumRequest" },
+      "description": "Payment requests for premium membership subscriptions"
+    },
+    "/transactions/{docId}": {
+      "description": "Payment transactions for boosts, memberships, and auto-split escrows"
+    },
+    "/commissions/{docId}": {
+      "description": "Commission tracking for sold marketplace items"
+    },
+    "/test/{docId}": {
+      "description": "Connection validation probe document"
+    }
+  }
+}
